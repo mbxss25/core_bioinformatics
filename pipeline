@@ -47,4 +47,4 @@ samtools sort -@ 32 -o Mapping/ERR5743893.sorted.bam Mapping/ERR5743893.bam
 
 samtools index Mapping/ERR5743893.sorted.bam
 
-#visualize your BAM file on Integrative Genomics Viewer (IGV)
+#visualize your BAM file on Integrative Genomics Viewer (IGV)| refer: https://youtu.be/die924mosh0?si=NUi5QWlImCdx-a5E
