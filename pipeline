@@ -1,0 +1,18 @@
+#Script to follow in unix
+
+#First, let’s create a directory to save our fastQC outputs to:
+
+mkdir -p QC_Reports 
+
+#Quality check using FastQC
+
+fastqc ERR5743893_1.fastq ERR5743893_2.fastq --outdir QC_Reports 
+
+#once qc is completed, run 
+multiqc . 
+
+#then run follwing, to open multi_qc reports of the quality check we performed.
+
+open multiqc_report.html
+
+#multiqc_report.html will give overview of quality of our sequences,I have uploaded report by the name "multiqc_plot", have a look.
