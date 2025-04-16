@@ -15,4 +15,4 @@ multiqc .
 
 open multiqc_report.html
 
-#multiqc_report.html will give overview of quality of our sequences,I have uploaded report by the name "multiqc_plot", have a look.
+#multiqc_report.html will give overview of quality of our sequences,I have uploaded report by the name "multiqc_plots.zip", have a look.
