@@ -5,7 +5,7 @@
 
 mkdir -p QC_Reports 
 
-#run FastQC on our target sample
+##run FastQC on our target sample
 #Quality check using FastQC
 
 fastqc ERR5743893_1.fastq ERR5743893_2.fastq --outdir QC_Reports 
@@ -48,3 +48,17 @@ samtools sort -@ 32 -o Mapping/ERR5743893.sorted.bam Mapping/ERR5743893.bam
 samtools index Mapping/ERR5743893.sorted.bam
 
 #visualize your BAM file on Integrative Genomics Viewer (IGV)| refer: https://youtu.be/die924mosh0?si=NUi5QWlImCdx-a5E
+
+##Variant calling using FreeBayes
+#First we need to index the reference genome using samtools:
+
+samtools faidx MN908947.fasta
+
+#Now, let’s use FreeBayes to identify the variants in our test sample:
+
+freebayes -f MN908947.fasta Mapping/ERR5743893.sorted.bam  > ERR5743893.vcf
+
+#compress and index the VCF file
+
+bgzip ERR5743893.vcf
+tabix ERR5743893.vcf.gz
