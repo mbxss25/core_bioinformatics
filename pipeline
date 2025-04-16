@@ -18,3 +18,32 @@ multiqc .
 open multiqc_report.html
 
 #multiqc_report.html will give overview of quality of our sequences,I have uploaded report by the name "multiqc_plots.zip", have a look.
+
+
+##Mapping
+#There are a few different tools that can be used to map sequences to a reference but we’re going to use BWA-MEM.
+
+#create a directory to store the results from BWA-MEM:
+
+mkdir Mapping
+
+#indexing
+
+bwa index MN908947.fasta 
+
+#map the sequences from our target sample to the reference genome
+
+bwa mem MN908947.fasta ERR5743893_1.fastq ERR5743893_2.fastq > Mapping/ERR5743893.sam
+
+#Now go to directort /Mapping, ypu will see "ERR5743893.sam". we’re going to convert the SAM file to a BAM file using samtools.
+
+samtools view -@ 20 -S -b Mapping/ERR5743893.sam > Mapping/ERR5743893.bam
+
+#we want a BAM file of reads and mapping information ordered by where in the reference genome those reads were aligned
+
+samtools sort -@ 32 -o Mapping/ERR5743893.sorted.bam Mapping/ERR5743893.bam
+
+#index the sorted BAM file
+
+samtools index Mapping/ERR5743893.sorted.bam
+
