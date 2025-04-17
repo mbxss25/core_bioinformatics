@@ -62,3 +62,96 @@ freebayes -f MN908947.fasta Mapping/ERR5743893.sorted.bam  > ERR5743893.vcf
 
 bgzip ERR5743893.vcf
 tabix ERR5743893.vcf.gz
+
+##Setting up Nextflow
+
+#set up your conda channels:
+
+conda config --add channels defaults
+conda config --add channels bioconda
+conda config --add channels conda-forge
+
+#create an environment called nextflow and install Nextflow in it
+
+conda create --name nextflow nextflow
+conda activate nextflow
+nextflow help
+
+#Creating a samplesheet for viralrecon
+#create a text file called samples.txt in your working directory. Copy and paste the ENA accessions below into this file:
+
+ERR5556343
+
+SRR13500958
+
+ERR5743893
+
+ERR5181310
+
+ERR5405022
+
+#use a for loop to run fastq-dump on each of the accessions in samples.txt:
+
+for i in $(cat samples.txt);do fastq-dump --split-files $i;done
+
+#compress the fastq files
+
+gzip *.fastq
+
+#create a directory called data and move the fastq files there:
+
+mkdir data
+mv *.fastq.gz data
+
+##viralrecon requires a CSV file containing the sample names and location of the fastq files input. The format of the samplesheet we’re going to use should look like this:
+#sample,fastq_1,fastq_2
+#SAMPLE_1,fastq_1_location,fastq_2_location
+
+#python script that can be used to generate the samplesheet automatically.
+
+wget -L https://raw.githubusercontent.com/nf-core/viralrecon/master/bin/fastq_dir_to_samplesheet.py
+
+#Now run the python script:
+
+python3 fastq_dir_to_samplesheet.py data samplesheet.csv -r1 _1.fastq.gz -r2 _2.fastq.gz
+
+#check file 
+cat samplesheet.csv
+
+##Running Viralrecon
+
+#activate nextflow
+conda activate nextflow
+
+#let’s run viralrecon
+
+nextflow run nf-core/viralrecon -profile conda \
+--max_memory '12.GB' --max_cpus 4 \
+--input samplesheet.csv \
+--outdir results/viralrecon \
+--protocol amplicon \
+--genome 'MN908947.3' \
+--primer_set artic \
+--primer_set_version 3 \
+--skip_kraken2 \
+--skip_assembly \
+--skip_pangolin \
+--skip_nextclade \
+--skip_asciigenome \
+--platform illumina \
+-resume
+
+##View results
+
+#nav result directory
+cd results/viralrecon
+ls
+
+#read multiqc
+open Multiqc
+
+#refer this file in branches to see my reports
+
+
+
+
