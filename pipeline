@@ -158,5 +158,104 @@ multiqc_report.html
 
 du -sh work
 
+#remove if needed
 
+##Vizualization 
+#insatall all necessary packages
+#couple of code to undrstand data
 
+list.files()
+var <- read.csv("variants_long_table.csv")
+head(var)
+dim(var)
+nrow(var)
+ncol(var)
+str(var)
+# Summary statistics of the whole data or specified columns
+
+## For the whole table 
+
+> summary(var)
+
+## For non-numerical data
+
+> summary(var$SAMPLE)
+
+Length     Class      Mode 
+153 character character 
+
+## For numerical data
+
+> summary(var$DP)
+
+Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+38     369    1014    2635    2766   41836 
+
+# Check the class of your data
+
+> class(var)
+
+[1] "data.frame"
+
+# Check the class of an object
+
+> class(var$CHROM)
+
+[1] "character"
+
+> typeof(var$CHROM)
+
+[1] "character"
+
+# Preview the data using a spreadsheet-style data viewer in RStudio
+> View(var)
+
+#Filtering columns
+
+#check column name
+colnames(var)
+
+#select column 1,4 and 4
+
+var[,c(1,4,5)]
+
+# Select columns 1, 4, and 5 with default display
+
+select(var, SAMPLE, REF, ALT)
+
+# Select columns 1, 4, and 5 with selected display
+select(var, SAMPLE, REF, ALT) %>% head(3)
+
+# Select all columns except the column “CALLER” with selected display
+select(var, -CALLER) %>% head(3)
+
+## Transform the data frame into a tibble
+
+var_tb <- as_tibble(var)
+select(var_tb, SAMPLE, REF, ALT) %>% head(3)
+
+#filtering row
+
+#Select rows with selected display using base R code
+> var_tb[var_tb$SAMPLE == "SRR13500958",]
+
+# Select rows with selected display using dplyr functions
+> filter(var_tb, SAMPLE == "SRR13500958") %>% head(3)
+
+#Filtering columns and rows
+
+# Select sample type (rows) and variables (columns) with selected display
+
+> var_tb %>% filter(SAMPLE == "SRR13500958") %>% select(CHROM, POS, REF, ALT) %>% head(3)
+
+# To select all data related to the sample specified
+
+> var_tb %>% filter(SAMPLE == "SRR13500958") %>% select(CHROM, POS, REF, ALT, DP)
+
+# To select only values for which DP>=500 for the same sample
+
+> var_tb %>% filter(SAMPLE == "SRR13500958" & DP>=500) %>% select(CHROM, POS, REF, ALT, DP)
+
+# To select only values for which DP>=1000 for the same sample
+
+> var_tb %>% filter(SAMPLE == "SRR13500958" & DP>=1000) %>% select(CHROM, POS, REF, ALT, DP)
