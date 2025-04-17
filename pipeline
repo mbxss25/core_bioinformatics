@@ -151,6 +151,7 @@ ls
 open Multiqc
 
 #refer this file in branches to see my reports
+multiqc_report.html
 
 
 
