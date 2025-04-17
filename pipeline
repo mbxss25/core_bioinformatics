@@ -153,6 +153,10 @@ open Multiqc
 #refer this file in branches to see my reports
 multiqc_report.html
 
+#Tidying up after Nextflow
+#check usage of workspace
+
+du -sh work
 
 
 
